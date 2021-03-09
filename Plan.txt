@@ -1,0 +1,41 @@
+
+CONSTRAINT: !! SI JS EST DISABLED THE GRAPH SHOULD NOT APPEAR !!
+
+	    !! the graph must be between h1 and article
+
+	    ! Can't edit HTML
+	    ! Use most relevant graph
+	    ! Max 2 library
+
+
+- inserer un graph au dessus de chaque tableau (data visu) pour exo 1
+
+- recup datas (qui se trouvent à cet url: https://canvasjs.com/services/data/datapoints.php)
+ with ajax --> use it to make a graph that refresh every sec. pour exo 2.
+
+
+---------------------- HOW WE GONE DO THIS ------------------------------------
+
+
+- use a js library (should be easier) --> "chart.js" or "ToastUI-Chart".
+
+- be logical in resolve: 1.DOM(access right place)  
+			 			 2.Retrieve data 
+			 			 3.Generate graph
+---> commit at each step.
+
+
+1) Understand what's ajax.
+ajax: loads in data without refreshing the browser (ex: facebook message).
+
+2) chart.js
+Need container for canvas (width: ...%)
+put chart in div between h1 and graph? document.getElement...?
+
+thursday: Understand ajax
+vdd: understand graph
+monday:
+tuesday:
+wednesday:
+
+
