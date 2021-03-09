@@ -313,7 +313,6 @@ function setData2(state) {
   }
   return data2;
 }
-console.log(countries2);
 
 const placeSelection2 = document.createElement("div");
 placeSelection2.id = "container2";
@@ -549,3 +548,57 @@ var myChart = new Chart(ctx, {
     },
   },
 });
+
+function resetChart() {
+  var ourRequest = new XMLHttpRequest();
+  var ourData = [];
+  ourRequest.open(
+    "GET",
+    "https://canvasjs.com/services/data/datapoints.php",
+    true
+  );
+
+  ourRequest.onload = function () {
+    const xAxis = [];
+    const yAxis = [];
+    if (ourRequest.status === 200) {
+      ourData = JSON.parse(ourRequest.responseText);
+      for (i = 0; i < ourData.length; i++) {
+        xAxis.push(ourData[i][0]);
+        yAxis.push(ourData[i][1]);
+      }
+    } else {
+      console.log("Error no status 200");
+    }
+    var ctx = document.getElementById("myChart3").getContext("2d");
+    var myChart = new Chart(ctx, {
+      type: "line",
+      data: {
+        labels: xAxis,
+        datasets: [
+          {
+            label: "Values",
+            data: yAxis,
+            backgroundColor: "rgba(255, 99, 132, 0.2)",
+            borderColor: "rgba(255, 99, 132, 1)",
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                beginAtZero: true,
+              },
+            },
+          ],
+        },
+      },
+    });
+  };
+  ourRequest.send();
+}
+
+setInterval(resetChart, 1000);
