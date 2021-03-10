@@ -17,7 +17,7 @@ function setData(state) {
   x = countries.indexOf(state);
   for (i = 2; i < table.rows[x + 2].cells.length; i++) {
     z = table.rows[x + 2].cells.item(i).innerHTML.replace(",", ".");
-    if (isNaN(z)) z = 0;
+    if (isNaN(z)) z = "no data available";
     data.push(parseFloat(z));
   }
   return data;
@@ -308,7 +308,7 @@ function setData2(state) {
   x = countries2.indexOf(state);
   for (i = 2; i < table2.rows[x + 1].cells.length; i++) {
     z = table2.rows[x + 1].cells.item(i).innerHTML.replace(",", ".");
-    if (isNaN(z)) z = 0;
+    if (isNaN(z)) z = "no data available";
     data2.push(parseFloat(z));
   }
   return data2;
@@ -549,56 +549,59 @@ var myChart = new Chart(ctx, {
   },
 });
 
-function resetChart() {
-  var ourRequest = new XMLHttpRequest();
-  var ourData = [];
-  ourRequest.open(
-    "GET",
-    "https://canvasjs.com/services/data/datapoints.php",
-    true
-  );
+const bodyContent = document.querySelector("#bodyContent");
+const placeSelection3 = document.createElement("div");
+placeSelection3.id = "container3";
+placeSelection3.innerHTML =
+  '<canvas id="myChart3" width="400" height="200"></canvas>';
 
-  ourRequest.onload = function () {
-    const xAxis = [];
-    const yAxis = [];
-    if (ourRequest.status === 200) {
-      ourData = JSON.parse(ourRequest.responseText);
-      for (i = 0; i < ourData.length; i++) {
-        xAxis.push(ourData[i][0]);
-        yAxis.push(ourData[i][1]);
-      }
-    } else {
-      console.log("Error no status 200");
-    }
-    var ctx = document.getElementById("myChart3").getContext("2d");
-    var myChart = new Chart(ctx, {
-      type: "line",
-      data: {
-        labels: xAxis,
-        datasets: [
+bodyContent.parentNode.insertBefore(placeSelection3, bodyContent);
+
+chartSet();
+
+const xAxis = [];
+const yAxis = [];
+
+async function resetChart() {
+  const datas = await fetch(
+    "https://canvasjs.com/services/data/datapoints.php"
+  );
+  const datasJson = await datas.json();
+  datasJson.forEach((elt) => {
+    xAxis.push(elt[0]);
+    yAxis.push(elt[1]);
+  });
+}
+
+async function chartSet() {
+  await resetChart().catch(() => {
+    console.warn("Didn't work");
+  });
+  const ctx = document.getElementById("myChart3").getContext("2d");
+  const myChart = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: xAxis,
+      datasets: [
+        {
+          label: "Random datas",
+          data: yAxis,
+          backgroundColor: "rgba(255, 99, 132, 0.2)",
+          borderColor: "rgba(255, 99, 132, 1)",
+          borderWidth: 1,
+        },
+      ],
+    },
+    options: {
+      scales: {
+        yAxes: [
           {
-            label: "Values",
-            data: yAxis,
-            backgroundColor: "rgba(255, 99, 132, 0.2)",
-            borderColor: "rgba(255, 99, 132, 1)",
-            borderWidth: 1,
+            ticks: {
+              beginAtZero: true,
+            },
           },
         ],
       },
-      options: {
-        scales: {
-          yAxes: [
-            {
-              ticks: {
-                beginAtZero: true,
-              },
-            },
-          ],
-        },
-      },
-    });
-  };
-  ourRequest.send();
+    },
+  });
 }
-
-setInterval(resetChart, 1000);
