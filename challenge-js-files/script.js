@@ -557,20 +557,28 @@ placeSelection3.innerHTML =
 
 bodyContent.parentNode.insertBefore(placeSelection3, bodyContent);
 
-chartSet();
+setInterval(chartSet, 1000);
+// chartSet();
 
-const xAxis = [];
-const yAxis = [];
+let xAxis = [];
+let yAxis = [];
 
 async function resetChart() {
   const datas = await fetch(
-    "https://canvasjs.com/services/data/datapoints.php"
+    "https://canvasjs.com/services/data/datapoints.php",
+    {
+      cache: "no-store",
+    }
   );
   const datasJson = await datas.json();
+  xAxis = [];
+  yAxis = [];
   datasJson.forEach((elt) => {
     xAxis.push(elt[0]);
     yAxis.push(elt[1]);
   });
+  console.log(xAxis);
+  console.log(yAxis);
 }
 
 async function chartSet() {
