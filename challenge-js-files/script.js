@@ -577,8 +577,6 @@ async function resetChart() {
     xAxis.push(elt[0]);
     yAxis.push(elt[1]);
   });
-  console.log(xAxis);
-  console.log(yAxis);
 }
 
 async function chartSet() {
